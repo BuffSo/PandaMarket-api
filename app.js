@@ -61,12 +61,17 @@ app.get('/products', asyncHandler(async (req, res) => {
 
   const offset = (page-1) * pageSize;       //오프셋 기반 페이지네이션 계산
 
+  const totalCount = await Product.countDocuments(searchQuery);
+
   const products = await Product.find(searchQuery)
     .sort(sortOption)
     .skip(offset)
     .limit(pageSize);
 
-  res.send(products);
+  res.send({
+    list: products,
+    totalCount: totalCount
+  });
 
 }));
 
